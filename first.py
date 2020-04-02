@@ -5,14 +5,21 @@ from production import  decodeProductionList
 NONTERMINAL = set([chr(ord('A') + i) for i in range(0, 26)])
 
 def getFirst(input):
-    productionList = decodeProductionList(input)
+    start, productionList = decodeProductionList(input)
 
     firstMap = first(productionList)
 
-    firstMap = {k:list(set(v)) for k, v in firstMap.items()}
-
     return firstMap
 
+
+
+def getAllTerminals(productionList):
+    ans = []
+    for production in productionList:
+        for right in production.rightList:
+            ans.extend([s for s in right if s not in NONTERMINAL])
+
+    return ans
 
 def first(productionList):
     productionMap = getProductionMap(productionList)
@@ -22,6 +29,13 @@ def first(productionList):
     for production in productionList:
         ans = __first(production, firstMap, productionMap)
         firstMap[production.nonterminal] = ans
+
+    firstMap = {k: list(set(v)) for k, v in firstMap.items()}
+
+    terminalList = list(set(getAllTerminals(productionList)))
+
+    firstMap.update({terminal:[terminal] for terminal in terminalList})
+
     return firstMap
 
 
