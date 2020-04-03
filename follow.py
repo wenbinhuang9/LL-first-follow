@@ -1,4 +1,4 @@
-from first import first, NONTERMINAL, EPSILON, decodeProductionList
+from first import first, NONTERMINAL, EPSILON, decodeProductionList, getFirstFromRight
 from collections import defaultdict
 
 def getFollow(input):
@@ -13,51 +13,41 @@ def follow(productionList, firstMap, start):
 
     followMap = defaultdict(list)
 
-    followMap[start].append("$")
+
 
     for nonterminal, followList in followProductionMap.items():
-
-        ans = __follow(nonterminal, firstMap, followMap, followProductionMap)
+        if nonterminal == "A":
+            print ("here")
+        ans = __follow(nonterminal, firstMap, followMap, followProductionMap, start)
         followMap[nonterminal] = ans
 
     return  followMap
 
-def __follow(nonterminal, firstMap, followMap, followProductionMap):
+def __follow(nonterminal, firstMap, followMap, followProductionMap, start):
     followList = followProductionMap[nonterminal]
 
     if nonterminal  in followMap:
         return followMap[nonterminal]
 
     ans = []
+
+    if nonterminal == start:
+        ans.append("$")
     for right, left in followList:
-        if right == "":
-            subans = __follow(left, firstMap, followMap, followProductionMap )
-            ans.extend(subans)
+        if right == "" :
+            if  nonterminal != left:
+                subans = __follow(left, firstMap, followMap, followProductionMap, start )
+                ans.extend(subans)
         else:
             subans =getFirstFromRight(right, firstMap)
             ans.extend(subans)
 
-            if containEpsilon(right, firstMap):
-                subans = __follow(left, firstMap, followMap, followProductionMap)
+            if containEpsilon(right, firstMap) and nonterminal != left:
+                subans = __follow(left, firstMap, followMap, followProductionMap, start)
                 ans.extend(subans)
 
     return list(set(ans))
 
-def getFirstFromRight(right, firstMap):
-    ans = []
-    subans  = firstMap[right[0]]
-    ans.extend(subans)
-    if EPSILON in subans:
-        ans.remove(EPSILON)
-    i =1
-    while i < len(right) and  EPSILON in subans:
-        subans = firstMap[right[i]]
-        i += 1
-        ans.extend(subans)
-        if EPSILON in subans:
-            ans.remove(EPSILON)
-
-    return list(set(ans))
 
 def containEpsilon(right, fisrtMap):
     for symbol in right:

@@ -1,6 +1,7 @@
 # LL-first-follow
-First and follow functions are used to aid the LL algorithm in parsing.
+First and Follow functions are used to aid the LL algorithm in parsing.
 
+And then use First and Follow functions to compute the parsing table  
 
 # How to use 
 
@@ -17,4 +18,14 @@ from  follow import  getFollow
        
 followMap = getFollow(input)
 
+```
+
+3. Compute Parsing Table as follows
+
+```
+
+from parsingtable import  createParseTable
+
+input = "./expression"
+table = createParseTable(input)
 ```

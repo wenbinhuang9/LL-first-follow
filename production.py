@@ -1,5 +1,5 @@
-def decodeProductionList(file):
 
+def decodeProductionList(file):
     ans = []
 
     start = None

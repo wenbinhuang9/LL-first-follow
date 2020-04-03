@@ -1,5 +1,6 @@
-start S
-S->ACB|Cbb|Ba
-A->BC|da
-B->g|e
-C->h|e
+start E
+E->TA
+A->+TA|e
+T->FB
+B->*FB|e
+F->(E)|i

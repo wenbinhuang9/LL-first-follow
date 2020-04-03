@@ -12,7 +12,6 @@ def getFirst(input):
     return firstMap
 
 
-
 def getAllTerminals(productionList):
     ans = []
     for production in productionList:
@@ -83,5 +82,18 @@ def firstEachRight(nonterminal, right, firstMap, productionMap):
 def isFristTerminalInRight(right):
     return len(right) > 0 and right[0] not in NONTERMINAL
 
+def getFirstFromRight(right, firstMap):
+    ans = []
+    subans  = firstMap[right[0]]
+    ans.extend(subans)
+    if EPSILON in subans:
+        ans.remove(EPSILON)
+    i =1
+    while i < len(right) and  EPSILON in subans:
+        subans = firstMap[right[i]]
+        i += 1
+        ans.extend(subans)
+        if EPSILON in subans:
+            ans.remove(EPSILON)
 
-
+    return list(set(ans))
